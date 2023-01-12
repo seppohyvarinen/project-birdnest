@@ -15,6 +15,19 @@ drones.get("/", async (req, res) => {
   }
 });
 
+drones.get("/pilotdata", async (req, res) => {
+  try {
+    let response = await axios.get(
+      "https://assignments.reaktor.com/birdnest/pilots/" +
+        req.params.serialnumber
+    );
+    res.send(response.data);
+  } catch (error) {
+    res.statusCode = 404;
+    res.send(error);
+  }
+});
+
 const getDrones = async () => {
   try {
     return response.data;
