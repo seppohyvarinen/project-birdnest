@@ -13,7 +13,9 @@ function App() {
   const getData = async () => {
     try {
       var response = await axios.get("/drones", {});
-      console.log(response.data);
+      var parsed = new XMLParser().parseFromString(response.data);
+
+      console.log(parsed.children[1].children);
     } catch (error) {
       console.error(error);
     }
