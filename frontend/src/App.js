@@ -35,10 +35,28 @@ function App() {
         }
         return true;
       });
-      console.log(violators);
+
+      if (violators.length !== 0) {
+        violators.map((v) => {
+          console.log(v.serialNumber);
+        });
+        violators.map((v) => {
+          getPilot(v);
+        });
+      }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const getPilot = async (v) => {
+    let pilot = await axios.get("/drones/pilotdata", {
+      params: {
+        serialnumber: v.serialNumber._text,
+      },
+    });
+
+    console.log(pilot.data);
   };
   return <div className="App">{drones}</div>;
 }
