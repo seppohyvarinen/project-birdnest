@@ -1,14 +1,18 @@
 const axios = require("axios");
 
-const getDrones = async () => {
-  try {
-    var response = await axios.get(
-      "https://assignments.reaktor.com/birdnest/drones"
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-};
+const express = require("express");
+const app = express();
 
-getDrones();
+const port = process.env.PORT || 8080;
+
+const translations = require("./routes/routes.js");
+
+var cors = require("cors");
+app.use(cors());
+app.use(express.static("frontend/build"));
+app.use(express.json());
+app.use("/translations", translations);
+
+const server = app.listen(port, () => {
+  console.log(`Listening on port ${server.address().port}`);
+});
