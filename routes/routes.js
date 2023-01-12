@@ -1,11 +1,14 @@
 const express = require("express");
-
+const axios = require("axios");
 let drones = express.Router();
 
 drones.get("/", async (req, res) => {
   try {
-    let drones = getDrones();
-    res.send(drones);
+    let response = await axios.get(
+      "https://assignments.reaktor.com/birdnest/drones"
+    );
+    console.log(response.data);
+    res.send(response.data);
   } catch (error) {
     res.statusCode = 404;
     res.send(error);
@@ -14,11 +17,10 @@ drones.get("/", async (req, res) => {
 
 const getDrones = async () => {
   try {
-    let response = await axios.get(
-      "https://assignments.reaktor.com/birdnest/drones"
-    );
     return response.data;
   } catch (error) {
     console.error(error);
   }
 };
+
+module.exports = drones;
