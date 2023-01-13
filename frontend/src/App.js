@@ -30,7 +30,7 @@ function App() {
         convert.xml2json(response.data, { compact: true, spaces: 2 })
       );
       let capturedDrones = parsed.report.capture.drone;
-      console.log(capturedDrones);
+      console.log("alldrones: " + capturedDrones);
 
       let centerPoint = { lat: 250000, lon: 250000 };
       let radius = 100000;
@@ -47,6 +47,8 @@ function App() {
               Math.pow(2, drone.positionY._text - centerPoint.lon) <=
             Math.pow(2, radius)
           ) {
+            drone.distance = calculateDistance(drone);
+            console.log("alldata?: " + JSON.stringify(drone));
             return true;
           }
         }
@@ -54,8 +56,12 @@ function App() {
         return false;
       });
 
+      console.log("whats here" + violators);
+
       if (violators.length !== 0) {
-        violators.forEach((v) => {
+        violators.map((v) => {
+          console.log("dist: " + v.positionX_text);
+
           getPilot(v);
         });
       }
@@ -64,7 +70,17 @@ function App() {
     }
   };
 
+  const calculateDistance = (drone) => {
+    let distance = Math.sqrt(
+      Math.pow(drone.positionX._text - 250000, 2) +
+        Math.pow(drone.positionY._text - 250000, 2)
+    );
+
+    return distance;
+  };
+
   const getPilot = async (v) => {
+    console.log("is this here? :" + v.serialNumber._text);
     let response = await axios.get("/drones/pilotdata", {
       params: {
         serialnumber: v.serialNumber._text,
@@ -78,6 +94,8 @@ function App() {
         firstName: response.data.firstName,
         lastName: response.data.lastName,
         email: response.data.email,
+        phoneNumber: response.data.phoneNumber,
+        closestDistance: v.distance,
       },
     ]);
   };
@@ -89,7 +107,10 @@ function App() {
             <h3>
               {drone.firstName} - {drone.lastName}
             </h3>
-            <p>{drone.email}</p>
+            <p>
+              email: {drone.email} phone: {drone.phoneNumber}
+            </p>
+            <p>distance: {drone.closestDistance / 100} meters</p>
           </div>
         ))}
       </div>
