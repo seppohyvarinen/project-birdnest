@@ -13,14 +13,14 @@ function App() {
 
     return () => clearInterval(interval);
   }, []);
-  useEffect(() => {
+  /*   useEffect(() => {
     console.log(
       "violators" +
         drones.map((d) => {
           console.log(d);
         })
     );
-  }, [drones]);
+  }, [drones]); */
 
   const getData = async () => {
     try {
@@ -48,7 +48,6 @@ function App() {
             Math.pow(2, radius)
           ) {
             drone.distance = calculateDistance(drone);
-            console.log("alldata?: " + JSON.stringify(drone));
             return true;
           }
         }
@@ -56,12 +55,8 @@ function App() {
         return false;
       });
 
-      console.log("whats here" + violators);
-
       if (violators.length !== 0) {
         violators.map((v) => {
-          console.log("dist: " + v.positionX_text);
-
           getPilot(v);
         });
       }
@@ -80,7 +75,6 @@ function App() {
   };
 
   const getPilot = async (v) => {
-    console.log("is this here? :" + v.serialNumber._text);
     let response = await axios.get("/drones/pilotdata", {
       params: {
         serialnumber: v.serialNumber._text,
