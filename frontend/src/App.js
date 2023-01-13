@@ -7,7 +7,11 @@ function App() {
   const [drones, setDrones] = useState([]);
 
   useEffect(() => {
-    getData();
+    const interval = setInterval(() => {
+      getData();
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, []);
   useEffect(() => {
     console.log(
