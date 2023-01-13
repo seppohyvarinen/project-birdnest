@@ -4,7 +4,7 @@ import axios from "axios";
 const convert = require("xml-js");
 
 function App() {
-  const [drones, setDrones] = useState(0);
+  const [drones, setDrones] = useState([]);
 
   useEffect(() => {
     getData();
@@ -20,20 +20,26 @@ function App() {
       let capturedDrones = parsed.report.capture.drone;
       console.log(capturedDrones);
 
+      let centerPoint = { lat: 250000, lon: 250000 };
+      let radius = 100000;
+
       var violators = capturedDrones.filter((drone) => {
-        if (drone.positionX._text < 150000) {
-          return false;
+        if (
+          drone.positionX._text <= 350000 &&
+          drone.positionX._text >= 150000 &&
+          drone.positionY._text <= 350000 &&
+          drone.positionY._text >= 150000
+        ) {
+          if (
+            Math.pow(2, drone.positionX._text - centerPoint.lat) +
+              Math.pow(2, drone.positionY._text - centerPoint.lon) <=
+            Math.pow(2, radius)
+          ) {
+            return true;
+          }
         }
-        if (drone.positionX._text > 350000) {
-          return false;
-        }
-        if (drone.positionY._text < 150000) {
-          return false;
-        }
-        if (drone.positionY._text > 350000) {
-          return false;
-        }
-        return true;
+
+        return false;
       });
 
       if (violators.length !== 0) {
