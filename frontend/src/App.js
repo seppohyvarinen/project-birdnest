@@ -5,6 +5,7 @@ const convert = require("xml-js");
 
 function App() {
   const [drones, setDrones] = useState([]);
+  const [filteredDrones, setFilteredDrones] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -13,14 +14,26 @@ function App() {
 
     return () => clearInterval(interval);
   }, []);
-  /*   useEffect(() => {
-    console.log(
-      "violators" +
-        drones.map((d) => {
-          console.log(d);
-        })
-    );
-  }, [drones]); */
+
+  useEffect(() => {
+    console.log("are we here");
+    let temp = [];
+    drones.map((d) => {
+      console.log("mapping: " + d.firstName);
+      if (temp.length !== 0) {
+        let canPush = true;
+        temp.forEach((t) => {
+          if (t.firstName === d.firstName) {
+            canPush = false;
+          }
+        });
+        canPush && temp.push(d);
+      } else {
+        temp.push(d);
+      }
+    });
+    setFilteredDrones(temp);
+  }, [drones]);
 
   const getData = async () => {
     try {
@@ -90,13 +103,30 @@ function App() {
         email: response.data.email,
         phoneNumber: response.data.phoneNumber,
         closestDistance: v.distance,
+        createdDt: v.createdDt,
       },
     ]);
+  };
+
+  const removeDuplicates = () => {
+    let temp = [];
+    drones.map((d) => {
+      if (temp.length !== 0) {
+        temp.forEach((t) => {
+          if (t.firstName !== d.firstName) {
+            temp.push(d);
+            console.log("in we go");
+          }
+        });
+      } else {
+        temp.push(d);
+      }
+    });
   };
   return (
     <div className="App">
       <div>
-        {drones.map((drone) => (
+        {filteredDrones.map((drone) => (
           <div>
             <h3>
               {drone.firstName} - {drone.lastName}
@@ -104,7 +134,10 @@ function App() {
             <p>
               email: {drone.email} phone: {drone.phoneNumber}
             </p>
-            <p>distance: {drone.closestDistance / 100} meters</p>
+            <p>
+              distance: {Math.round((drone.closestDistance / 1000) * 100) / 100}
+              meters
+            </p>
           </div>
         ))}
       </div>
