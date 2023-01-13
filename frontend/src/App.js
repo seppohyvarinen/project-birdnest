@@ -9,6 +9,14 @@ function App() {
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    console.log(
+      "violators" +
+        drones.map((d) => {
+          console.log(d);
+        })
+    );
+  }, [drones]);
 
   const getData = async () => {
     try {
@@ -43,10 +51,7 @@ function App() {
       });
 
       if (violators.length !== 0) {
-        violators.map((v) => {
-          console.log(v.serialNumber);
-        });
-        violators.map((v) => {
+        violators.forEach((v) => {
           getPilot(v);
         });
       }
@@ -56,15 +61,36 @@ function App() {
   };
 
   const getPilot = async (v) => {
-    let pilot = await axios.get("/drones/pilotdata", {
+    let response = await axios.get("/drones/pilotdata", {
       params: {
         serialnumber: v.serialNumber._text,
       },
     });
+    console.log(response.data);
 
-    console.log(pilot.data);
+    setDrones((drones) => [
+      ...drones,
+      {
+        firstName: response.data.firstName,
+        lastName: response.data.lastName,
+        email: response.data.email,
+      },
+    ]);
   };
-  return <div className="App">{drones}</div>;
+  return (
+    <div className="App">
+      <div>
+        {drones.map((drone) => (
+          <div>
+            <h3>
+              {drone.firstName} - {drone.lastName}
+            </h3>
+            <p>{drone.email}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default App;
