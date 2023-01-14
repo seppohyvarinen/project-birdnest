@@ -40,14 +40,13 @@ function App() {
       console.log();
       const tenMinutes = 2000;
       let d = new Date(date);
-      d.setSeconds(d.getSeconds() + 20);
-      console.log("howbouthere " + new Date(d));
+      d.setMinutes(d.getMinutes() + 10);
+
       return new Date() > d;
     };
 
     for (let i = temp.length - 1; i >= 0; i--) {
       if (tenMinutesGone(temp[i].createdDt)) {
-        console.log(temp[i].firstName + " should go!");
         temp.splice(i, 1);
       }
     }
