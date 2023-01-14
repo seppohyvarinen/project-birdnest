@@ -2,8 +2,9 @@ import "./display.css";
 
 const Display = ({ filteredDrones }) => {
   return (
-    <div className="DisplayScreen">
-      <div>
+    <>
+      <div className="header">Recent Violations Of The No-Flight Zone:</div>
+      <div className="DisplayScreen">
         {filteredDrones.map((drone) => (
           <div className="pilotCard">
             <div className="data">
@@ -11,22 +12,30 @@ const Display = ({ filteredDrones }) => {
                 {drone.firstName} {drone.lastName}
               </h3>
               <div className="contactInfo">
-                <p>email: {drone.email}</p>
-                <p>phone: {drone.phoneNumber}</p>
+                <p>
+                  email: <b>{drone.email}</b>
+                </p>
+                <p>
+                  phone: <b>{drone.phoneNumber}</b>
+                </p>
               </div>
               <div className="statistics">
                 <p>
-                  Closest confirmed distance:
-                  {Math.round((drone.closestDistance / 1000) * 100) / 100}
-                  meters
+                  Distance:{" "}
+                  <b>
+                    {Math.round((drone.closestDistance / 1000) * 100) / 100}
+                    meters
+                  </b>
                 </p>
-                <p>Last Seen: {drone.createdDt.toLocaleString()}</p>
+                <p>
+                  Last Seen: <b>{drone.createdDt.toLocaleString()}</b>
+                </p>
               </div>
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
