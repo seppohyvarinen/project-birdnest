@@ -1,6 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Display from "./components/Display";
 const convert = require("xml-js");
 
 function App() {
@@ -113,23 +114,7 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        {filteredDrones.map((drone) => (
-          <div>
-            <h3>
-              {drone.firstName} - {drone.lastName}
-            </h3>
-            <p>
-              email: {drone.email} phone: {drone.phoneNumber}
-            </p>
-            <p>
-              distance: {Math.round((drone.closestDistance / 1000) * 100) / 100}
-              meters
-            </p>
-            <p>Last seen: {drone.createdDt.toLocaleString()}</p>
-          </div>
-        ))}
-      </div>
+      <Display filteredDrones={filteredDrones} />
     </div>
   );
 }
