@@ -22,14 +22,11 @@ function App() {
       if (temp.length !== 0) {
         let canPush = true;
         temp.forEach((t) => {
-          if (t.firstName === d.firstName) {
+          if (t.firstName === d.firstName && t.lastName === d.lastName) {
             t.createdDt = d.createdDt;
-            console.log("here: " + d.closestDistance);
-            console.log("and: " + t.closestDistance);
+
             if (t.closestDistance > d.closestDistance) {
-              console.log("old distance: " + t.closestDistance);
               t.closestDistance = d.closestDistance;
-              console.log("new distance: " + t.closestDistance);
             }
             canPush = false;
           }
@@ -39,6 +36,22 @@ function App() {
         temp.push(d);
       }
     });
+    const tenMinutesGone = (date) => {
+      console.log();
+      const tenMinutes = 2000;
+      let d = new Date(date);
+      d.setSeconds(d.getSeconds() + 20);
+      console.log("howbouthere " + new Date(d));
+      return new Date() > d;
+    };
+
+    for (let i = temp.length - 1; i >= 0; i--) {
+      if (tenMinutesGone(temp[i].createdDt)) {
+        console.log(temp[i].firstName + " should go!");
+        temp.splice(i, 1);
+      }
+    }
+
     temp.sort(function (a, b) {
       return new Date(b.createdDt) - new Date(a.createdDt);
     });
