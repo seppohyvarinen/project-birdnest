@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 const convert = require("xml-js");
 
@@ -42,7 +42,7 @@ function App() {
 
   const getData = async () => {
     try {
-      var response = await axios.get("/drones", {});
+      let response = await axios.get("/drones", {});
 
       const parsed = JSON.parse(
         convert.xml2json(response.data, { compact: true, spaces: 2 })
@@ -52,7 +52,7 @@ function App() {
       let centerPoint = { lat: 250000, lon: 250000 };
       let radius = 100000;
 
-      var violators = capturedDrones.filter((drone) => {
+      let violators = capturedDrones.filter((drone) => {
         if (
           drone.positionX._text <= 350000 &&
           drone.positionX._text >= 150000 &&
@@ -111,21 +111,6 @@ function App() {
     ]);
   };
 
-  const removeDuplicates = () => {
-    let temp = [];
-    drones.map((d) => {
-      if (temp.length !== 0) {
-        temp.forEach((t) => {
-          if (t.firstName !== d.firstName) {
-            temp.push(d);
-            console.log("in we go");
-          }
-        });
-      } else {
-        temp.push(d);
-      }
-    });
-  };
   return (
     <div className="App">
       <div>
