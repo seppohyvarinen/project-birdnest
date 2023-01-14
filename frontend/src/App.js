@@ -2,6 +2,8 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Display from "./components/Display";
+
+import { minutesPassed, calculateDistance } from "./Utils/Utils";
 const convert = require("xml-js");
 
 function App() {
@@ -36,17 +38,9 @@ function App() {
         temp.push(d);
       }
     });
-    const tenMinutesGone = (date) => {
-      console.log();
-      const tenMinutes = 2000;
-      let d = new Date(date);
-      d.setMinutes(d.getMinutes() + 10);
-
-      return new Date() > d;
-    };
 
     for (let i = temp.length - 1; i >= 0; i--) {
-      if (tenMinutesGone(temp[i].createdDt)) {
+      if (minutesPassed(temp[i].createdDt, 10)) {
         temp.splice(i, 1);
       }
     }
@@ -91,22 +85,13 @@ function App() {
       });
 
       if (violators.length !== 0) {
-        violators.map((v) => {
+        violators.forEach((v) => {
           getPilot(v);
         });
       }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const calculateDistance = (drone) => {
-    let distance = Math.sqrt(
-      Math.pow(drone.positionX._text - 250000, 2) +
-        Math.pow(drone.positionY._text - 250000, 2)
-    );
-
-    return distance;
   };
 
   const getPilot = async (v) => {
