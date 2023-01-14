@@ -60,9 +60,9 @@ function App() {
           drone.positionY._text >= 150000
         ) {
           if (
-            Math.pow(2, drone.positionX._text - centerPoint.lat) +
-              Math.pow(2, drone.positionY._text - centerPoint.lon) <=
-            Math.pow(2, radius)
+            Math.pow(drone.positionX._text - centerPoint.lat, 2) +
+              Math.pow(drone.positionY._text - centerPoint.lon, 2) <=
+            Math.pow(radius, 2)
           ) {
             drone.distance = calculateDistance(drone);
             return true;
