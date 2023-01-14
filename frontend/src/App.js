@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Display from "./components/Display";
 
-import { minutesPassed, calculateDistance } from "./Utils/Utils";
+import {
+  minutesPassed,
+  calculateDistance,
+  filterViolators,
+} from "./Utils/Utils";
 const convert = require("xml-js");
 
 function App() {
@@ -64,25 +68,7 @@ function App() {
       let centerPoint = { lat: 250000, lon: 250000 };
       let radius = 100000;
 
-      let violators = capturedDrones.filter((drone) => {
-        if (
-          drone.positionX._text <= 350000 &&
-          drone.positionX._text >= 150000 &&
-          drone.positionY._text <= 350000 &&
-          drone.positionY._text >= 150000
-        ) {
-          if (
-            Math.pow(drone.positionX._text - centerPoint.lat, 2) +
-              Math.pow(drone.positionY._text - centerPoint.lon, 2) <=
-            Math.pow(radius, 2)
-          ) {
-            drone.distance = calculateDistance(drone);
-            return true;
-          }
-        }
-
-        return false;
-      });
+      let violators = filterViolators(capturedDrones, centerPoint, radius);
 
       if (violators.length !== 0) {
         violators.forEach((v) => {
