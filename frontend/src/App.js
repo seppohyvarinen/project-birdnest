@@ -16,14 +16,19 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("are we here");
     let temp = [];
     drones.map((d) => {
-      console.log("mapping: " + d.firstName);
       if (temp.length !== 0) {
         let canPush = true;
         temp.forEach((t) => {
           if (t.firstName === d.firstName) {
+            console.log(t.createdDt.toLocaleString());
+            t.createdDt = d.createdDt;
+            console.log(t.createdDt.toLocaleString());
+
+            if (t.distance > d.distance) {
+              t.distance = d.distance;
+            }
             canPush = false;
           }
         });
@@ -43,7 +48,6 @@ function App() {
         convert.xml2json(response.data, { compact: true, spaces: 2 })
       );
       let capturedDrones = parsed.report.capture.drone;
-      console.log("alldrones: " + capturedDrones);
 
       let centerPoint = { lat: 250000, lon: 250000 };
       let radius = 100000;
@@ -93,7 +97,6 @@ function App() {
         serialnumber: v.serialNumber._text,
       },
     });
-    console.log(response.data);
 
     setDrones((drones) => [
       ...drones,
@@ -103,7 +106,7 @@ function App() {
         email: response.data.email,
         phoneNumber: response.data.phoneNumber,
         closestDistance: v.distance,
-        createdDt: v.createdDt,
+        createdDt: new Date(),
       },
     ]);
   };
@@ -138,6 +141,7 @@ function App() {
               distance: {Math.round((drone.closestDistance / 1000) * 100) / 100}
               meters
             </p>
+            <p>Last seen: {drone.createdDt.toLocaleString()}</p>
           </div>
         ))}
       </div>
