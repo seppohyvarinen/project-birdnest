@@ -38,6 +38,10 @@ function App() {
         temp.push(d);
       }
     });
+    temp.sort(function (a, b) {
+      return new Date(b.createdDt) - new Date(a.createdDt);
+    });
+
     setFilteredDrones(temp);
   }, [drones]);
 
