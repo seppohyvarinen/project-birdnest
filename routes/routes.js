@@ -2,6 +2,11 @@ const express = require("express");
 const axios = require("axios");
 let drones = express.Router();
 
+/*
+Backend route for fetching the report on drones.
+Sends the report as response data to the frontend or alternatively 404 statuscode.
+*/
+
 drones.get("/", async (req, res) => {
   try {
     let response = await axios.get(
@@ -15,6 +20,10 @@ drones.get("/", async (req, res) => {
   }
 });
 
+/*
+Backend route for fetching pilot data on pilots that have violated the no-flight zone.
+Sends the report as response data to the frontend or alternatively 404 statuscode.
+*/
 drones.get("/pilotdata", async (req, res) => {
   try {
     console.log(req.query);
@@ -31,13 +40,5 @@ drones.get("/pilotdata", async (req, res) => {
     res.send(error);
   }
 });
-
-const getDrones = async () => {
-  try {
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 module.exports = drones;
