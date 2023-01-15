@@ -1,7 +1,7 @@
-export const calculateDistance = (drone) => {
+export const calculateDistance = (drone, centerPoint) => {
   let distance = Math.sqrt(
-    Math.pow(drone.positionX._text - 250000, 2) +
-      Math.pow(drone.positionY._text - 250000, 2)
+    Math.pow(drone.positionX._text - centerPoint.lon, 2) +
+      Math.pow(drone.positionY._text - centerPoint.lat, 2)
   );
 
   return distance;
@@ -27,7 +27,7 @@ export const filterViolators = (capturedDrones, centerPoint, radius) => {
           Math.pow(drone.positionY._text - centerPoint.lon, 2) <=
         Math.pow(radius, 2)
       ) {
-        drone.distance = calculateDistance(drone);
+        drone.distance = calculateDistance(drone, centerPoint);
         return true;
       }
     }
