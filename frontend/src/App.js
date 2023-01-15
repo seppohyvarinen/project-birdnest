@@ -10,10 +10,13 @@ import {
 } from "./Utils/Utils";
 const convert = require("xml-js");
 
+// Main frontend function of the application
 function App() {
+  // List of all drones seen and also the filtered list which is Displayed in the UI
   const [drones, setDrones] = useState([]);
   const [filteredDrones, setFilteredDrones] = useState([]);
 
+  //This useEffect has 2000ms interval so it calls the function getData() every 2 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       getData();
@@ -22,6 +25,12 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  /*
+  This useEffect has the drones state as dependency so everytime it's updated,
+  here the application handles filtering duplicates, updating timestamps, distances
+  and ordering the list. Finally here the app sets the filteredDrones state which is displayed to the user.
+  If a drone has been in the list for 10 minutes, it is removed from the filtered list.
+  */
   useEffect(() => {
     let temp = [];
     drones.map((d) => {
@@ -56,6 +65,10 @@ function App() {
     setFilteredDrones(temp);
   }, [drones]);
 
+  /*
+  Function for fetching the general report of the drones. Uses axios to fetch.
+  This function also filters the violators and calls the getPilot function when needed.
+  */
   const getData = async () => {
     try {
       let response = await axios.get("/drones", {});
@@ -80,6 +93,10 @@ function App() {
     }
   };
 
+  /*
+  Function for fetching the pilot data for drones that violated the no-flight zone. Uses axios to fetch.
+  Here the application also sets the drones state which will contain data of all drones registered.
+  */
   const getPilot = async (v) => {
     let response = await axios.get("/drones/pilotdata", {
       params: {
