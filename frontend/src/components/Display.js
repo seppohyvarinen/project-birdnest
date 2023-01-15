@@ -1,13 +1,21 @@
 import { useRef } from "react";
 import "./display.css";
 
+// Component for displaying the data
 const Display = ({ filteredDrones }) => {
+  /*
+    useRef hooks are here used to mark certain divs in the Display component
+    so the user can scroll to top or bottom with a press of a button
+    */
   const topRef = useRef(null);
   const bottomRef = useRef(null);
 
+  // Function for scrolling to the top of the drone list
   const handleTopClick = () => {
     topRef.current.scrollIntoView({ behavior: "smooth" });
   };
+  // Function for scrolling to the bottom of the drone list
+
   const handleBottomClick = () => {
     bottomRef.current.scrollIntoView({ behavior: "smooth" });
   };
