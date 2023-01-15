@@ -1,10 +1,28 @@
+import { useRef } from "react";
 import "./display.css";
 
 const Display = ({ filteredDrones }) => {
+  const topRef = useRef(null);
+  const bottomRef = useRef(null);
+
+  const handleTopClick = () => {
+    topRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+  const handleBottomClick = () => {
+    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <>
       <div className="header">Recent Violations Of The No-Flight Zone:</div>
+      {filteredDrones.length > 4 && (
+        <div className="buttons">
+          <button onClick={() => handleTopClick()}>Scroll To Top</button>
+          <button onClick={() => handleBottomClick()}>Scroll To Bottom</button>
+        </div>
+      )}
+
       <div className="DisplayScreen">
+        <div ref={topRef}></div>
         {filteredDrones.map((drone) => (
           <div className="pilotCard">
             <div className="data">
@@ -32,6 +50,7 @@ const Display = ({ filteredDrones }) => {
                 </p>
               </div>
             </div>
+            <div ref={bottomRef}></div>
           </div>
         ))}
       </div>
